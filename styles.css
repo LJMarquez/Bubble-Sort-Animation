@@ -1,0 +1,19 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #2f4f4f;
+}
+
+#bar-wrapper {
+    width: 100%;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    margin-top: 1vh;
+}
+
+.bar {
+    /* background-color: red; */
+    outline: 1px solid black;
+    display: inline-block;
+}
