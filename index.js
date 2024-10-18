@@ -1,6 +1,8 @@
 const barWrapper = document.getElementById("bar-wrapper");
+const popAudio = document.getElementById("pop-audio");
 
 const barAmount = 100;
+const time = 50;
 let orderArr = [];
 
 for (let i = 0; i < barAmount; i++) {
@@ -11,18 +13,19 @@ for (let i = 0; i < barAmount; i++) {
   let bar = document.createElement("div");
   let width = 95 / barAmount;
   bar.style.width = `${width}vw`;
-  bar.style.height = `${i}vh`;
-  bar.style.backgroundColor = "red";
+  bar.style.backgroundColor = "white";
   bar.classList.add("bar");
   let randomIndex = Math.floor(Math.random() * orderArr.length);
   let randomOrder = orderArr[randomIndex];
   orderArr.splice(randomIndex, 1);
-  bar.style.order = `${randomOrder}`;
+  bar.style.order = `${i}`;
   bar.id = `${randomOrder}`;
+  bar.style.height = `${randomOrder}vh`;
   barWrapper.appendChild(bar);
 }
 
 let barsArray = Array.from(document.querySelectorAll(".bar"));
+// console.log(barsArray);
 
 function sortBars() {
   let sortedArr = [...barsArray];
@@ -30,68 +33,56 @@ function sortBars() {
 
   for (let i = 0; i < n - 1; i++) {
     let isSwapped = false;
-
-    (function swapBars(i) {
-      let j = 0;
-
-      function innerSwap() {
-        if (j < n - i - 1) {
-          let currentBar = sortedArr[j];
-          let nextBar = sortedArr[j + 1];
-
-          // Set the color of the moving bar to blue
-          currentBar.style.backgroundColor = "blue";
-
-          if (parseInt(currentBar.id) > parseInt(nextBar.id)) {
+    setTimeout(() => {
+      for (let j = 0; j < n - i - 1; j++) {
+        setTimeout(() => {
+          sortedArr.forEach((bar) => {
+            if (bar.style.backgroundColor !== "lightgreen") {
+              bar.style.backgroundColor = "white";
+            }
+          });
+          if (parseInt(sortedArr[j].id) > parseInt(sortedArr[j + 1].id)) {
             // Swap the elements
             let temp = sortedArr[j];
             sortedArr[j] = sortedArr[j + 1];
             sortedArr[j + 1] = temp;
-
-            // Update their order
             let bigBar = document.getElementById(`${sortedArr[j].id}`);
-            let bigBarOrder = bigBar.style.order;
-            bigBarOrder++;
-            bigBar.style.order = `${bigBarOrder}`;
             let smallBar = document.getElementById(`${sortedArr[j + 1].id}`);
-            let smallBarOrder = smallBar.style.order;
-            smallBarOrder--;
-            smallBar.style.order = `${smallBarOrder}`;
+            smallBar.style.backgroundColor = "white";
+            let bigBarOrder = bigBar.style.order;
+            bigBar.style.order = smallBar.style.order;
+            smallBar.style.order = bigBarOrder;
+            smallBar.style.backgroundColor = "red";
+            let audio = document.createElement("audio");
+            audio.style.display = "none";
+            audio.src = "pop.mp3";
+            // audio.preservesPitch = true;
+            // let pitch = 1 + (j / n);
+            // audio.playbackRate = pitch;
+            audio.play();
+            setTimeout(() => {
+              audio.remove();
+            }, 500)
 
             isSwapped = true;
           }
-
-          // Move to the next pair
-          j++;
-          setTimeout(innerSwap, 200);
-        } else {
-          // Reset the color of the bars and check if any swaps occurred
-          for (let k = 0; k < sortedArr.length; k++) {
-            sortedArr[k].style.backgroundColor = "red"; // Reset color
+          if (j === n - i - 2) {
+            document.getElementById(`${sortedArr[j + 1].id}`).style.backgroundColor = "lightgreen";
+            console.log("reached end");
           }
+        }, j * time);
 
-          // If no swapping occurred, the array is sorted
+
+        setTimeout(() => {
           if (!isSwapped) {
-            console.log("Array is sorted, exiting early.");
             return;
+            // return sortedArr;
           }
 
-          // Call the next iteration for the next i
-          swapBars(i + 1);
-        }
+        }, (n - i - 1) * time);
       }
-
-      // Start the first inner swap
-      innerSwap();
-    })(i);
+    }, i * (n - 1) * time);
   }
-
-  // Final color change for the last bar
-  setTimeout(() => {
-    let biggestBar = sortedArr[n - 1];
-    biggestBar.style.backgroundColor = "green";
-  }, (n - 1) * 200);
 }
 
-// Call the sorting function
-// sortBars();
+// console.log(sortBars(barsArray));
