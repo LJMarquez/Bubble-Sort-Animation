@@ -1,15 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bubble Sort</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <button onclick="sortBars()">Click</button>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <form id="start-wrapper">
+      <h1>Bubble Sort Animation</h1>
+      <div>
+        <p>How many bars do you want to sort?</p>
+      </div>
+      <select name="speed-selector" id="speed-select">
+        <option value="normal" disabled selected>Choose Animation Speed</option>
+        <option value="slow">Slow</option>
+        <option value="normal">Normal</option>
+        <option value="fast">Fast</option>
+      </select required>
+      <button type="submit">Start</button>
+    </form>
+
     <div id="bar-wrapper"></div>
     <audio id="pop-audio" src="pop.mp3"></audio>
     <script src="index.js"></script>
-</body>
+  </body>
 </html>

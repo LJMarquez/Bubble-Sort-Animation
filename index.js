@@ -1,30 +1,60 @@
 const barWrapper = document.getElementById("bar-wrapper");
 const popAudio = document.getElementById("pop-audio");
+let barAmount = 100;
+let form = document.querySelector("form");
+let speedSelect = document.getElementById("speed-select");
 
-const barAmount = 100;
-const time = 50;
+let time = 50;
+let barsArray;
+
+speedSelect.addEventListener("change", function () {
+  let speed = this.value;
+  switch (speed) {
+    case "slow":
+      time = 100;
+      break;
+    case "normal":
+      time = 50;
+      break;
+    case "fast":
+      time = 2;
+      break;
+  }
+});
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  form.style.display = "none";
+  renderBars();
+  setTimeout(() => {
+    barsArray = Array.from(document.querySelectorAll(".bar"));
+    sortBars();
+  }, 10)
+});
+
 let orderArr = [];
 
 for (let i = 0; i < barAmount; i++) {
   orderArr.push(i);
 }
 
-for (let i = 0; i < barAmount; i++) {
-  let bar = document.createElement("div");
-  let width = 95 / barAmount;
-  bar.style.width = `${width}vw`;
-  bar.style.backgroundColor = "white";
-  bar.classList.add("bar");
-  let randomIndex = Math.floor(Math.random() * orderArr.length);
-  let randomOrder = orderArr[randomIndex];
-  orderArr.splice(randomIndex, 1);
-  bar.style.order = `${i}`;
-  bar.id = `${randomOrder}`;
-  bar.style.height = `${randomOrder}vh`;
-  barWrapper.appendChild(bar);
+function renderBars() {
+  for (let i = 0; i < barAmount; i++) {
+    let bar = document.createElement("div");
+    let width = 95 / barAmount;
+    bar.style.width = `${width}vw`;
+    bar.style.backgroundColor = "white";
+    bar.classList.add("bar");
+    let randomIndex = Math.floor(Math.random() * orderArr.length);
+    let randomOrder = orderArr[randomIndex];
+    orderArr.splice(randomIndex, 1);
+    bar.style.order = `${i}`;
+    bar.id = `${randomOrder}`;
+    bar.style.height = `${randomOrder}vh`;
+    barWrapper.appendChild(bar);
+  }
 }
 
-let barsArray = Array.from(document.querySelectorAll(".bar"));
 // console.log(barsArray);
 
 function sortBars() {
